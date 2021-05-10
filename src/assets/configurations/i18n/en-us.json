@@ -1,9 +1,13 @@
 {
   "app": {
-    "name": "Angular Dashboard Template",
+    "name": "To-do List",
     "menu": {
       "item-1": "Home",
-      "item-2": "About"
+      "item-2": "About",
+      "item-3": "Todos"
+    },
+    "buttons": {
+      "insert": "Create New Todo"
     }
   }
 }

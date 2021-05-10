@@ -1,0 +1,9 @@
+<div id="loading-container" *ngIf="listState === 'loading'">
+  <mat-spinner></mat-spinner>
+</div>
+
+<ng-container #successState *ngIf="listState === 'success'">
+  <ng-content></ng-content>
+</ng-container>
+
+<ng-container #errorState *ngIf="listState === 'error'"> error </ng-container>

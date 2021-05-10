@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Atenção</h2>
+<mat-dialog-content>
+  <p>{{ modalText.message }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end" *ngIf="modalAction === 'confirm'">
+    <button mat-stroked-button matDialogClose="no"> Não</button>
+    <button mat-flat-button matDialogClose="yes" color="primary">Sim</button>
+</mat-dialog-actions>
+
+<mat-dialog-actions align="end" *ngIf="modalAction === 'alert'">
+    <button mat-stroked-button matDialogClose="ok" color="primary"> Ok</button>
+</mat-dialog-actions>
+

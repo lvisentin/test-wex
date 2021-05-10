@@ -1,4 +1,3 @@
-import { AvatarModule } from './common/components/avatar/avatar.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -16,10 +15,11 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import {SharedModule } from "./common/shared/shared.module";
 
 export const maskOptions: Partial<IConfig> | (() => Partial<IConfig>) = {};
 @NgModule({
-  declarations: [ AppComponent ],
+  declarations: [ AppComponent,],
   imports: [
     BrowserModule,
     AppRouting,
@@ -40,7 +40,7 @@ export const maskOptions: Partial<IConfig> | (() => Partial<IConfig>) = {};
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
-    AvatarModule
+    SharedModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
