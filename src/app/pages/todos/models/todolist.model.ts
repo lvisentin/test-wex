@@ -15,3 +15,10 @@ export interface EditTodoRequest {
   title: string;
   content: string;
 }
+
+export interface TodoDialogData {
+  id: string;
+  title: string;
+  content: string;
+  mode: string;
+}

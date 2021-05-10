@@ -1,20 +1,48 @@
-<h1 mat-dialog-title>Insert new Todo</h1>
-<div mat-dialog-content>
-  <form [formGroup]="todoForm">
-    <mat-form-field class="todo-input">
-      <mat-label>Title</mat-label>
-      <input formControlName="title" matInput placeholder="Todo title" />
-    </mat-form-field>
-    <mat-form-field class="todo-input">
-      <mat-label>Content</mat-label>
-      <input formControlName="content" matInput placeholder="Todo title" />
-    </mat-form-field>
-  </form>
-</div>
-<div class="mat-dialog-footer" mat-dialog-buttons>
-  <button class="mr-button" mat-stroked-button (click)="close()">Close</button>
-  <button mat-flat-button color="primary" (click)="confirmAction()">
-    {{ mode }}
-  </button>
-  <!-- <button mat-flat-button color="primary" *ngIf="mode === 'edit'" (click)="confirmTodoEdit()">Edit</button> -->
-</div>
+<ng-container *ngIf="data.mode === 'edit'; else viewMode">
+  <h1 mat-dialog-title>Insert new Todo</h1>
+  <div mat-dialog-content>
+    <form [formGroup]="todoForm">
+      <mat-form-field class="todo-input">
+        <mat-label>Title</mat-label>
+        <input formControlName="title" matInput placeholder="Todo title" />
+      </mat-form-field>
+      <mat-form-field class="todo-input">
+        <mat-label>Content</mat-label>
+        <input formControlName="content" matInput placeholder="Todo title" />
+      </mat-form-field>
+    </form>
+  </div>
+  <div class="mat-dialog-footer" mat-dialog-buttons>
+    <button class="mr-button" mat-stroked-button (click)="close()">
+      Close
+    </button>
+    <button mat-flat-button color="primary" (click)="confirmAction()">
+      {{ data.mode }}
+    </button>
+  </div>
+</ng-container>
+
+<ng-template #viewMode>
+  <h1 mat-dialog-title>
+    Todo #{{ data.id }} - Created at: {{ data.createdAt | date }}
+  </h1>
+  <div mat-dialog-content>
+    <!-- <form [formGroup]="todoForm">
+      <mat-form-field class="todo-input">
+        <mat-label>Title</mat-label>
+        <input formControlName="title" matInput placeholder="Todo title" />
+      </mat-form-field>
+      <mat-form-field class="todo-input">
+        <mat-label>Content</mat-label>
+        <input formControlName="content" matInput placeholder="Todo title" />
+      </mat-form-field>
+    </form> -->
+    <p>Title: {{data.title}}</p>
+    <p>Content: {{data.content}}</p>
+  </div>
+  <div class="mat-dialog-footer" mat-dialog-buttons>
+    <button class="mr-button" mat-stroked-button (click)="close()">
+      Close
+    </button>
+  </div>
+</ng-template>

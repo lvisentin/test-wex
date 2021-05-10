@@ -11,3 +11,26 @@ table {
   align-items: center;
   justify-content: space-between;
 }
+
+.insert-todo-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+@media only screen and (max-width:576px) {
+  .searchbar-form{
+    max-width: 40%;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  .insert-todo-button {
+    max-width: 50%;
+
+  }
+
+}

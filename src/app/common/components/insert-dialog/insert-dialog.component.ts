@@ -12,6 +12,7 @@ import {
   InsertTodoRequest,
   EditTodoRequest,
   Todo,
+  TodoDialogData,
 } from "src/app/pages/todos/models/todolist.model";
 import { TodoService } from "../../services/todo/todo.service";
 import {
@@ -28,7 +29,6 @@ import { AlertDialogService } from "../alert-dialog/service/alert-dialog.service
 })
 export class InsertDialogComponent implements OnInit, OnDestroy {
   public todoForm: FormGroup;
-  public mode: string = this.data ? "edit" : "insert";
   private destroy: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -36,11 +36,11 @@ export class InsertDialogComponent implements OnInit, OnDestroy {
     private readonly todoService: TodoService,
     private readonly dialogRef: MatDialogRef<InsertDialogComponent>,
     private readonly confirmAlertService: AlertDialogService,
-    @Inject(MAT_DIALOG_DATA) private readonly data: Todo
+    @Inject(MAT_DIALOG_DATA) public readonly data: TodoDialogData
   ) {}
 
   ngOnInit(): void {
-    console.log(this.mode);
+    console.log(this.data);
     this.createForms();
   }
 
@@ -53,7 +53,7 @@ export class InsertDialogComponent implements OnInit, OnDestroy {
     const modalOpt: ModalOptions = {
       actionType: "confirm",
       dialogMessage: {
-        message: `Are you sure you want to ${this.mode} this todo?`,
+        message: `Are you sure you want to ${this.data.mode} this todo?`,
       },
     };
 
@@ -61,7 +61,7 @@ export class InsertDialogComponent implements OnInit, OnDestroy {
       .openConfirmAlertModal(modalOpt)
       .subscribe((answer: ModalAnswer) => {
         if (answer.answer === "yes") {
-          this.mode === "edit" ? this.editTodo() : this.insertTodo();
+          this.data.mode === "edit" ? this.editTodo() : this.insertTodo();
         } else {
           console.log(answer);
         }
@@ -76,9 +76,9 @@ export class InsertDialogComponent implements OnInit, OnDestroy {
     const request: EditTodoRequest = {
       id: this.data.id,
       title: this.todoForm.get("title").value,
-      content: this.todoForm.get("title").value,
-    }
-    
+      content: this.todoForm.get("content").value,
+    };
+
     this.todoService.editTodo(request).subscribe((response) => {
       const modalOpt = {
         actionType: "alert",
@@ -86,11 +86,9 @@ export class InsertDialogComponent implements OnInit, OnDestroy {
           message: "Success!",
         },
       };
-      this.confirmAlertService
-        .openConfirmAlertModal(modalOpt)
-        .subscribe(() => {
-          this.dialogRef.close("new");
-        });
+      this.confirmAlertService.openConfirmAlertModal(modalOpt).subscribe(() => {
+        this.dialogRef.close("new");
+      });
       console.log(response);
     });
   }
@@ -108,19 +106,27 @@ export class InsertDialogComponent implements OnInit, OnDestroy {
           message: "Success!",
         },
       };
-      this.confirmAlertService
-        .openConfirmAlertModal(modalOpt)
-        .subscribe(() => {
-          this.dialogRef.close("new");
-        });
+      this.confirmAlertService.openConfirmAlertModal(modalOpt).subscribe(() => {
+        this.dialogRef.close("new");
+      });
       console.log(response);
     });
   }
 
   private createForms(): void {
     this.todoForm = this.formBuilder.group({
-      title: this.data ? this.data.title : "",
-      content: this.data ? this.data.content : "",
+      title: [
+        {
+          value: this.data ? this.data.title : "",
+          disabled: this.data.mode === "edit" ? false : true,
+        },
+      ],
+      content: [
+        {
+          value: this.data ? this.data.content : "",
+          disabled: this.data.mode === "edit" ? false : true,
+        },
+      ],
     });
   }
 }
