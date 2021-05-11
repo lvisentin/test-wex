@@ -54,12 +54,12 @@ export class TodosComponent implements OnInit {
     this.destroy.unsubscribe();
   }
 
-  public openCreateDialog(todo: Todo = null): void {
+  public openDialog(todo: Todo = null): void {
     const dialogRef = this.matDialog.open<
       InsertDialogComponent,
       TodoDialogData
     >(InsertDialogComponent, {
-      data: { ...todo, mode: "edit" },
+      data: { ...todo, mode: todo ? "edit": "insert" },
       width: "450px",
     });
 
@@ -130,6 +130,7 @@ export class TodosComponent implements OnInit {
     this.todoService.getAllTodos().subscribe((response: Array<Todo>) => {
       this.listState = ListState.success;
       this.dataSource.data = response;
+      console.log(this.dataSource.data)
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
@@ -140,6 +141,8 @@ export class TodosComponent implements OnInit {
       .pipe(debounceTime(500))
       .subscribe((change) => {
         this.dataSource.filter = change.searchInput;
+        console.log(this.dataSource)
+        console.log(this.dataSource.filter)
       });
   }
 }

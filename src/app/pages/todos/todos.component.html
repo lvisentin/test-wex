@@ -3,24 +3,49 @@
     <div class="todo-list-header">
       <form class="searchbar-form" [formGroup]="searchbarForm">
         <mat-form-field>
-          <mat-label>SearchBar</mat-label>
-          <input
-            matInput
-            formControlName="searchInput"
-            placeholder="SearchBar"
-          />
+          <mat-label>Search by title or content</mat-label>
+          <input matInput formControlName="searchInput" placeholder="Search by title or content" />
         </mat-form-field>
       </form>
 
-      <button
-        class="insert-todo-button"
-        mat-flat-button
-        color="primary"
-        (click)="openCreateDialog()"
-      >
+      <button class="insert-todo-button" mat-flat-button color="primary" (click)="openDialog()">
         <mat-icon aria-label="Side nav toggle icon">note_add</mat-icon>
         Create new Todo
       </button>
+    </div>
+
+    <div class="todo-list">
+      <ul *ngIf="dataSource.filteredData.length > 0; else noDataFound">
+        <li class="todo-item" *ngFor="let todo of dataSource.filteredData">
+          <div class="todo-header">
+            <h3>Todo #{{ todo.id }} - Created at: {{ todo.createdAt | date }}</h3>
+            <div class="actions-div">
+              <button mat-icon-button matTooltip="Edit todo" aria-label="Edit Todo" (click)="openInfoDialog(todo)">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Edit todo" aria-label="Edit Todo" (click)="openDialog(todo)">
+                <mat-icon>create</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Delete todo" aria-label="Delete Todo"
+                (click)="openDeleteConfirmation(todo.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="todo-row">
+            <h4 class="title">Title: </h4>
+            <p>{{ todo.title }}</p>
+          </div>
+          <div class="todo-row">
+            <h4 class="title">Content: </h4>
+            <p>{{ todo.content }}</p>
+          </div>
+
+        </li>
+      </ul>
+      <ng-template #noDataFound>
+        <p class="not-found-msg">No task found :( </p>
+      </ng-template>
     </div>
 
     <!-- <table mat-table matSort [dataSource]="dataSource">
@@ -73,7 +98,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table> -->
 
-    <mat-table [dataSource]="dataSource" matSort>
+    <!-- <mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="id">
         <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
         <mat-cell *matCellDef="let element">{{ element.id }}</mat-cell>
@@ -129,11 +154,8 @@
         mat-row
         *matRowDef="let row; columns: displayedColumns"
       ></mat-row>
-    </mat-table>
+    </mat-table> -->
 
-    <mat-paginator
-      [pageSizeOptions]="[5, 10, 20]"
-      showFirstLastButtons
-    ></mat-paginator>
+    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
   </my-todo-list>
 </main>

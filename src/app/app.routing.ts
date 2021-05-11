@@ -4,15 +4,6 @@ import { Routes, RouterModule } from "@angular/router";
 
 const routes: Routes = [
   {
-    path: "home",
-    loadChildren: () =>
-      import("./pages/home/home.module").then((m) => m.HomeModule),
-    canActivate: [FeatureFlagGuard],
-    data: {
-      featureFlag: "home",
-    },
-  },
-  {
     path: "todos",
     loadChildren: () =>
       import("./pages/todos/todos.module").then((m) => m.TodosModule),
@@ -22,22 +13,13 @@ const routes: Routes = [
     },
   },
   {
-    path: "about",
-    loadChildren: () =>
-      import("./pages/about/about.module").then((m) => m.AboutModule),
-    canActivate: [FeatureFlagGuard],
-    data: {
-      featureFlag: "about",
-    },
-  },
-  {
     path: "",
-    redirectTo: "home",
+    redirectTo: "todos",
     pathMatch: "full",
   },
   {
     path: "**",
-    redirectTo: "home",
+    redirectTo: "todos",
   },
 ];
 

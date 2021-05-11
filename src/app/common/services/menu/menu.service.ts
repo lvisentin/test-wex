@@ -9,16 +9,6 @@ export class MenuService {
   getMenus(): Observable<Menu[]> {
     return of([
       Menu.build({
-        name: "app.menu.item-1",
-        route: "home",
-        featureFlag: "home",
-      }),
-      Menu.build({
-        name: "app.menu.item-2",
-        route: "about",
-        featureFlag: "about",
-      }),
-      Menu.build({
         name: "app.menu.item-3",
         route: "todos",
         featureFlag: "todos",

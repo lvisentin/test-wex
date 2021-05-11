@@ -1,5 +1,5 @@
-<ng-container *ngIf="data.mode === 'edit'; else viewMode">
-  <h1 mat-dialog-title>Insert new Todo</h1>
+<ng-container *ngIf="data.mode === 'edit' || data.mode === 'insert'; else viewMode">
+  <h1 class="dialog-title" mat-dialog-title>{{ data.mode }}</h1>
   <div mat-dialog-content>
     <form [formGroup]="todoForm">
       <mat-form-field class="todo-input">
@@ -16,7 +16,7 @@
     <button class="mr-button" mat-stroked-button (click)="close()">
       Close
     </button>
-    <button mat-flat-button color="primary" (click)="confirmAction()">
+    <button [disabled]="todoForm.invalid" class="submit-button" mat-flat-button color="primary" (click)="confirmAction()">
       {{ data.mode }}
     </button>
   </div>
@@ -27,16 +27,6 @@
     Todo #{{ data.id }} - Created at: {{ data.createdAt | date }}
   </h1>
   <div mat-dialog-content>
-    <!-- <form [formGroup]="todoForm">
-      <mat-form-field class="todo-input">
-        <mat-label>Title</mat-label>
-        <input formControlName="title" matInput placeholder="Todo title" />
-      </mat-form-field>
-      <mat-form-field class="todo-input">
-        <mat-label>Content</mat-label>
-        <input formControlName="content" matInput placeholder="Todo title" />
-      </mat-form-field>
-    </form> -->
     <p>Title: {{data.title}}</p>
     <p>Content: {{data.content}}</p>
   </div>

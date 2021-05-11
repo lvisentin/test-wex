@@ -6,14 +6,9 @@ import { ListState } from '../../enums/ListState';
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.scss']
 })
-export class TodoListComponent implements OnInit {
+export class TodoListComponent {
 
   @Input('state') listState: ListState;
 
   constructor() { }
-  
-  ngOnInit(): void {
-    console.log(this.listState)
-  }
-
 }

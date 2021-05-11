@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewEncapsulation,
 } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Subject } from "rxjs";
 import {
@@ -40,7 +40,6 @@ export class InsertDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.data);
     this.createForms();
   }
 
@@ -62,8 +61,6 @@ export class InsertDialogComponent implements OnInit, OnDestroy {
       .subscribe((answer: ModalAnswer) => {
         if (answer.answer === "yes") {
           this.data.mode === "edit" ? this.editTodo() : this.insertTodo();
-        } else {
-          console.log(answer);
         }
       });
   }
@@ -89,7 +86,7 @@ export class InsertDialogComponent implements OnInit, OnDestroy {
       this.confirmAlertService.openConfirmAlertModal(modalOpt).subscribe(() => {
         this.dialogRef.close("new");
       });
-      console.log(response);
+
     });
   }
 
@@ -109,7 +106,7 @@ export class InsertDialogComponent implements OnInit, OnDestroy {
       this.confirmAlertService.openConfirmAlertModal(modalOpt).subscribe(() => {
         this.dialogRef.close("new");
       });
-      console.log(response);
+
     });
   }
 
@@ -118,14 +115,22 @@ export class InsertDialogComponent implements OnInit, OnDestroy {
       title: [
         {
           value: this.data ? this.data.title : "",
-          disabled: this.data.mode === "edit" ? false : true,
+          disabled:
+            this.data.mode === "edit" || this.data.mode === "insert"
+              ? false
+              : true,
         },
+        Validators.required,
       ],
       content: [
         {
           value: this.data ? this.data.content : "",
-          disabled: this.data.mode === "edit" ? false : true,
+          disabled:
+            this.data.mode === "edit" || this.data.mode === "insert"
+              ? false
+              : true,
         },
+        Validators.required,
       ],
     });
   }
