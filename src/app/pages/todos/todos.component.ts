@@ -4,9 +4,8 @@ import { ListState } from "src/app/common/enums/ListState";
 import { Todo, TodoDialogData } from "./models/todolist.model";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { debounceTime, takeUntil } from "rxjs/operators";
-import { MatSort } from "@angular/material/sort";
 import { MatDialog } from "@angular/material/dialog";
 import { InsertDialogComponent } from "src/app/common/components/insert-dialog/insert-dialog.component";
 import { AlertDialogService } from "src/app/common/components/alert-dialog/service/alert-dialog.service";
@@ -15,12 +14,14 @@ import {
   ModalOptions,
 } from "src/app/common/components/alert-dialog/models/alert-dialog.model";
 import { Subject } from "rxjs";
+
 @Component({
   selector: "app-todos",
   templateUrl: "./todos.component.html",
   styleUrls: ["./todos.component.scss"],
   encapsulation: ViewEncapsulation.None,
 })
+
 export class TodosComponent implements OnInit {
   public listState: ListState = ListState.success;
   public dataSource = new MatTableDataSource<Todo>();
@@ -30,11 +31,43 @@ export class TodosComponent implements OnInit {
     "content",
     "actions",
   ];
-  public searchbarForm;
+  public searchbarForm: FormGroup;
+  public orderForm: FormGroup;
+  public orderBy = [
+    {
+      name: "No order",
+      value: 0,
+      item: null,
+      type: null,
+    },
+    {
+      name: "Title A-Z",
+      value: 1,
+      item: "title",
+      type: "asc",
+    },
+    {
+      name: "Title Z-A",
+      value: 2,
+      item: "title",
+      type: "desc",
+    },
+    {
+      name: "Content A-Z",
+      value: 3,
+      item: "content",
+      type: "asc",
+    },
+    {
+      name: "Content Z-A",
+      value: 4,
+      item: "content",
+      type: "desc",
+    },
+  ];
   private destroy: Subject<boolean> = new Subject<boolean>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(
     private readonly matDialog: MatDialog,
@@ -46,6 +79,7 @@ export class TodosComponent implements OnInit {
   ngOnInit(): void {
     this.createForms();
     this.getTodos();
+
     this.subscribeToSearchBarChanges();
   }
 
@@ -59,7 +93,7 @@ export class TodosComponent implements OnInit {
       InsertDialogComponent,
       TodoDialogData
     >(InsertDialogComponent, {
-      data: { ...todo, mode: todo ? "edit": "insert" },
+      data: { ...todo, mode: todo ? "edit" : "insert" },
       width: "450px",
     });
 
@@ -78,6 +112,39 @@ export class TodosComponent implements OnInit {
       data: { ...todo, mode: "view" },
       width: "450px",
     });
+  }
+
+  public orderData(): void {
+    const type = this.orderForm.controls.sortBy.value.type;
+    const item = this.orderForm.controls.sortBy.value.item;
+
+    if (!type || !item) {
+      this.dataSource.filteredData.sort((a, b) =>
+      a.id > b.id
+        ? 1
+        : b.id > a.id
+        ? -1
+        : 0
+    );
+    } else {
+      if (type === "asc") {
+        this.dataSource.filteredData.sort((a, b) =>
+          a[item].toLowerCase() > b[item].toLowerCase()
+            ? 1
+            : b[item].toLowerCase() > a[item].toLowerCase()
+            ? -1
+            : 0
+        );
+      } else {
+        this.dataSource.filteredData.sort((a, b) =>
+          a[item].toLowerCase() < b[item].toLowerCase()
+            ? 1
+            : b[item].toLowerCase() < a[item].toLowerCase()
+            ? -1
+            : 0
+        );
+      } 
+    }
   }
 
   public openDeleteConfirmation(todoId: string): void {
@@ -123,6 +190,10 @@ export class TodosComponent implements OnInit {
     this.searchbarForm = this.formBuilder.group({
       searchInput: "",
     });
+
+    this.orderForm = this.formBuilder.group({
+      sortBy: "",
+    });
   }
 
   private getTodos(): void {
@@ -130,9 +201,8 @@ export class TodosComponent implements OnInit {
     this.todoService.getAllTodos().subscribe((response: Array<Todo>) => {
       this.listState = ListState.success;
       this.dataSource.data = response;
-      console.log(this.dataSource.data)
       this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      this.orderData();
     });
   }
 
@@ -141,8 +211,7 @@ export class TodosComponent implements OnInit {
       .pipe(debounceTime(500))
       .subscribe((change) => {
         this.dataSource.filter = change.searchInput;
-        console.log(this.dataSource)
-        console.log(this.dataSource.filter)
+        this.orderData();
       });
   }
 }

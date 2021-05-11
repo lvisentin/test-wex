@@ -15,6 +15,7 @@ import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { HttpClient } from "@angular/common/http";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   declarations: [TodosComponent],
@@ -27,6 +28,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     MatInputModule,
     ReactiveFormsModule,
     MatSortModule,
+    MatSelectModule,
     FormsModule,
     MatIconModule,
     MatButtonModule,

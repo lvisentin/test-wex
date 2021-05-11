@@ -29,11 +29,22 @@ table {
   margin: 30px 0 !important;
 }
 
+.order-by-form-field {
+  width: 100%;
+}
+
 .todo-item {
   .todo-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    h3 {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      margin: 0;
+    }
   }
 
   .todo-row {
@@ -47,6 +58,9 @@ table {
 
     * {
       margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
@@ -75,5 +89,14 @@ table {
 
   .insert-todo-button {
     max-width: 50%;
+  }
+
+  .todo-header {
+    h3 {
+      max-width: 59%;
+    }
+    .actions-div {
+      min-width: 40%;
+    }
   }
 }
